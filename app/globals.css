@@ -556,62 +556,120 @@ ul, ol { list-style: none; }
   background: var(--cat-lifestyle);
 }
 
-/* ---------- Affiliate Box ---------- */
-.affiliate-box {
-  background: linear-gradient(135deg, #fef9e7, #fff8e1);
-  border: 2px solid #f39c12;
-  border-radius: var(--radius-md);
-  padding: 24px;
-  margin: 32px 0;
+/* ---------- Affiliate Rich Card ---------- */
+.aff-section {
+  margin: 36px 0;
 }
-.affiliate-box-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  margin-bottom: 16px;
-}
-.affiliate-item {
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(243, 156, 18, 0.2);
-}
-.affiliate-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-
-.affiliate-item-title {
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.affiliate-item-desc {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+.aff-section-notice {
+  font-size: 0.72rem;
+  color: var(--text-light);
   margin-bottom: 12px;
+  text-align: right;
 }
 
-.affiliate-buttons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+.aff-card {
+  display: block;
+  position: relative;
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+  text-decoration: none;
 }
-.affiliate-buttons a {
+.aff-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+}
+.aff-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+
+.aff-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.aff-card-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+.aff-card-name {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.aff-card-catch {
+  display: block;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.7);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.aff-card-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 14px;
+}
+
+.aff-card-features {
+  list-style: none;
+  margin-bottom: 20px;
+  padding: 0;
+}
+.aff-card-features li {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.8;
+  padding-left: 0;
+}
+
+.aff-card-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
+  width: 100%;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #fff;
-  transition: transform var(--transition), box-shadow var(--transition);
-  min-width: 140px;
   text-align: center;
+  letter-spacing: 0.03em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 1;
 }
-.affiliate-buttons a:hover {
+.aff-card:hover .aff-card-btn {
   transform: scale(1.02);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  filter: brightness(1.1);
 }
 
+/* 旧スタイル（互換性のため残す） */
 .btn-rakuten { background: linear-gradient(135deg, #bf0000, #e60033); }
 .btn-amazon { background: linear-gradient(135deg, #FF9900, #e88500); }
 .btn-yahoo { background: linear-gradient(135deg, #ff0033, #cc0029); }
+
+.affiliate-box-notice {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-bottom: 16px;
+}
 
 /* ---------- Share Buttons ---------- */
 .share-buttons {

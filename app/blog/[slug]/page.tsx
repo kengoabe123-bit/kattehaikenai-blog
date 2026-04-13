@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { articles, CATEGORIES } from '@/content/articles';
 import type { Article, CategoryKey } from '@/content/articles';
+import { getAffiliatesForCategory } from '@/content/affiliates';
 
 export function generateStaticParams() {
   return articles.map((article) => ({
@@ -159,29 +160,54 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             </section>
           ))}
 
-          {/* アフィリエイトボックス */}
-          {article.affiliateLinks && article.affiliateLinks.length > 0 && (
-            <div className="affiliate-box">
-              <h3 className="affiliate-box-title">🔗 関連リンク</h3>
-              {article.affiliateLinks.map((link, i) => (
-                <div key={i} className="affiliate-item">
-                  <p className="affiliate-item-title">{link.title}</p>
-                  {link.description && <p className="affiliate-item-desc">{link.description}</p>}
-                  <div className="affiliate-buttons">
-                    {link.rakutenUrl && (
-                      <a href={link.rakutenUrl} target="_blank" rel="noopener noreferrer nofollow" className="btn-rakuten">楽天で見る</a>
-                    )}
-                    {link.amazonUrl && (
-                      <a href={link.amazonUrl} target="_blank" rel="noopener noreferrer nofollow" className="btn-amazon">Amazonで見る</a>
-                    )}
-                    {link.yahooUrl && (
-                      <a href={link.yahooUrl} target="_blank" rel="noopener noreferrer nofollow" className="btn-yahoo">Yahoo!で見る</a>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          {/* アフィリエイトボックス（カテゴリ別自動表示） */}
+          {(() => {
+            const affiliates = getAffiliatesForCategory(article.category);
+            if (affiliates.length === 0) return null;
+            return (
+              <div className="aff-section">
+                <p className="aff-section-notice">※ 以下はプロモーションを含みます</p>
+                {affiliates.map((aff) => (
+                  <a
+                    key={aff.id}
+                    href={aff.url}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="aff-card"
+                    style={{ background: aff.brandGradient }}
+                  >
+                    <div className="aff-card-header">
+                      <span className="aff-card-icon">{aff.icon}</span>
+                      <div>
+                        <span className="aff-card-name">{aff.serviceName}</span>
+                        <span className="aff-card-catch">{aff.catchcopy}</span>
+                      </div>
+                    </div>
+                    <p className="aff-card-desc">{aff.description}</p>
+                    <ul className="aff-card-features">
+                      {aff.features.map((f, i) => (
+                        <li key={i}>✓ {f}</li>
+                      ))}
+                    </ul>
+                    <span
+                      className="aff-card-btn"
+                      style={{ background: aff.buttonGradient }}
+                    >
+                      {aff.buttonLabel}
+                    </span>
+                    {/* A8.net トラッキングピクセル */}
+                    <img
+                      src={aff.trackingPixel}
+                      width={1}
+                      height={1}
+                      alt=""
+                      style={{ border: 0, position: 'absolute', opacity: 0 }}
+                    />
+                  </a>
+                ))}
+              </div>
+            );
+          })()}
 
           {/* まとめ */}
           <section id="conclusion" className="article-section article-conclusion">
