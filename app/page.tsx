@@ -14,7 +14,7 @@ export default function Home() {
       {/* ヒーローセクション */}
       <section className="hero-blog">
         <div className="hero-blog-inner">
-          <h1 className="hero-blog-title">kattehaikenai.com</h1>
+          <h1 className="hero-blog-title">イマドキ！</h1>
           <p className="hero-blog-sub">暮らしの雑学＆エンタメ情報メディア</p>
           <p className="hero-blog-desc">毎日更新のトレンド情報をお届けします</p>
         </div>
@@ -120,7 +120,7 @@ export default function Home() {
             <h3 className="sidebar-title">プロフィール</h3>
             <div className="sidebar-profile">
               <div className="sidebar-profile-icon">📝</div>
-              <p className="sidebar-profile-name">kattehaikenai.com</p>
+              <p className="sidebar-profile-name">イマドキ！</p>
               <p className="sidebar-profile-desc">暮らしに役立つ雑学やエンタメ情報を毎日お届けしています</p>
             </div>
           </div>

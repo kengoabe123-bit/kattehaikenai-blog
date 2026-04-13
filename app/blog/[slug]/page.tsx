@@ -57,8 +57,8 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     image: article.heroImage,
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
-    author: { '@type': 'Organization', name: 'kattehaikenai.com' },
-    publisher: { '@type': 'Organization', name: 'kattehaikenai.com' },
+    author: { '@type': 'Organization', name: 'イマドキ！' },
+    publisher: { '@type': 'Organization', name: 'イマドキ！' },
   };
 
   const breadcrumbSchema = {

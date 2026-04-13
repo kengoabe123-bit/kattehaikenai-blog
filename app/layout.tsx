@@ -18,7 +18,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const SITE_NAME = 'kattehaikenai.com';
+const SITE_NAME = 'イマドキ！';
 const SITE_DESCRIPTION = '暮らしの雑学＆エンタメ情報メディア。毎日更新のトレンド情報をお届けします。';
 
 export const metadata: Metadata = {

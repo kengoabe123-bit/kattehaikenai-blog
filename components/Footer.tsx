@@ -11,7 +11,7 @@ export function Footer() {
           <Link href="/contact">お問い合わせ</Link>
         </nav>
         <p className="footer-copy">
-          © {new Date().getFullYear()} kattehaikenai.com All rights reserved.
+          © {new Date().getFullYear()} イマドキ！ All rights reserved.
         </p>
       </div>
     </footer>

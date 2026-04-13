@@ -5,7 +5,7 @@ export function Header() {
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" className="header-logo" id="header-logo">
-          kattehaikenai.com
+          イマドキ！
         </Link>
         <nav className="header-nav" id="header-nav">
           <Link href="/category/entertainment">エンタメ</Link>

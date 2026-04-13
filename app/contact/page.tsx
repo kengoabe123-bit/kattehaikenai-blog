@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'お問い合わせ',
-  description: 'kattehaikenai.comへのお問い合わせはこちらから。',
+  description: 'イマドキ！へのお問い合わせはこちらから。',
 };
 
 export default function ContactPage() {

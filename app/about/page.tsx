@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: '運営者情報',
-  description: 'kattehaikenai.comの運営者情報です。サイトの目的と運営方針をご確認ください。',
+  description: 'イマドキ！の運営者情報です。サイトの目的と運営方針をご確認ください。',
 };
 
 export default function AboutPage() {
@@ -14,12 +14,12 @@ export default function AboutPage() {
 
         <section className="legal-section">
           <h2>サイト名</h2>
-          <p>kattehaikenai.com</p>
+          <p>イマドキ！</p>
         </section>
 
         <section className="legal-section">
           <h2>サイトの目的</h2>
-          <p>kattehaikenai.comは、暮らしの雑学＆エンタメ情報を毎日お届けする情報メディアです。ドラマ・映画の最新情報から、季節のイベント、スポーツの話題まで、幅広いトレンド情報を分かりやすくお届けします。</p>
+          <p>イマドキ！は、暮らしの雑学＆エンタメ情報を毎日お届けする情報メディアです。ドラマ・映画の最新情報から、季節のイベント、スポーツの話題まで、幅広いトレンド情報を分かりやすくお届けします。</p>
         </section>
 
         <section className="legal-section">
