@@ -173,6 +173,38 @@ def build_trend_article_prompt(keyword: str, site_name: str) -> str:
   "description": "meta description（100〜120文字、キーワード含む、読者の悩みに寄り添う）",
   "category": "entertainment または lifestyle または sports のいずれか",
   "tags": ["関連タグ3〜5つ"],
+  "ranking": [
+    {{
+      "rank": 1,
+      "name": "1位の商品/サービス/作品名",
+      "rating": 4.8,
+      "comment": "おすすめポイントを1文で（30〜50文字）"
+    }},
+    {{
+      "rank": 2,
+      "name": "2位の名前",
+      "rating": 4.5,
+      "comment": "おすすめポイント"
+    }},
+    {{
+      "rank": 3,
+      "name": "3位の名前",
+      "rating": 4.2,
+      "comment": "おすすめポイント"
+    }},
+    {{
+      "rank": 4,
+      "name": "4位の名前",
+      "rating": 4.0,
+      "comment": "おすすめポイント"
+    }},
+    {{
+      "rank": 5,
+      "name": "5位の名前",
+      "rating": 3.8,
+      "comment": "おすすめポイント"
+    }}
+  ],
   "intro": "導入文（200〜300文字、読者の悩みや疑問に共感し、この記事で解決できることを明示）",
   "sections": [
     {{
@@ -183,6 +215,12 @@ def build_trend_article_prompt(keyword: str, site_name: str) -> str:
   "conclusion": "まとめ（200〜300文字、記事の要点を3つに絞って箇条書き、読者に次のアクションを促す）"
 }}
 ```
+
+## ★ ranking フィールドについて（必ず含めること）
+- 記事のテーマに合った「おすすめランキングTOP5」を必ず作成すること
+- ドラマなら人気作品、グッズならおすすめ商品、旅行なら人気スポットなど
+- ratingは1.0〜5.0の範囲（0.5刻みで現実的な評価）
+- 1位が最も高い評価にすること
 
 ## 記事の品質基準（厳守）
 
@@ -370,6 +408,23 @@ def build_trend_article_ts_entry(article: dict, images: list[dict], today: str, 
         img_url = images[0].get("url", images[0].get("src", "")).replace("'", "\\'")
         hero_image = img_url
 
+    # ランキングデータの構築
+    ranking_ts = ""
+    ranking_items = article.get("ranking", [])
+    if ranking_items:
+        ranking_entries = []
+        for r in ranking_items:
+            r_name = str(r.get("name", "")).replace("'", "\\'")
+            r_comment = str(r.get("comment", "")).replace("'", "\\'")
+            r_rank = r.get("rank", 0)
+            r_rating = r.get("rating", 0)
+            ranking_entries.append(f"""      {{ rank: {r_rank}, name: '{r_name}', rating: {r_rating}, comment: '{r_comment}' }}""")
+        ranking_joined = ",\n".join(ranking_entries)
+        ranking_ts = f"""
+    ranking: [
+{ranking_joined}
+    ],"""
+
     return f"""  {{
     id: '{article_id}',
     slug: '{slug}',
@@ -380,7 +435,7 @@ def build_trend_article_ts_entry(article: dict, images: list[dict], today: str, 
     publishedAt: '{today}T00:00:00+09:00',
     updatedAt: '{today}T00:00:00+09:00',
     heroImage: '{hero_image}',
-    heroImageAlt: '{title}',
+    heroImageAlt: '{title}',{ranking_ts}
     content: {{
       intro: `{intro}`,
       sections: [

@@ -14,8 +14,16 @@ export interface Article {
     sections: Section[];
     conclusion: string;
   };
+  ranking?: RankingItem[];
   affiliateLinks?: AffiliateLink[];
   relatedSlugs?: string[];
+}
+
+export interface RankingItem {
+  rank: number;
+  name: string;
+  rating: number;
+  comment: string;
 }
 
 export interface Section {

@@ -129,6 +129,36 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             <img src={article.heroImage} alt={article.heroImageAlt} />
           </div>
 
+          {/* ランキングカード（結論ファースト） */}
+          {article.ranking && article.ranking.length > 0 && (
+            <div className="ranking-card">
+              <h2 className="ranking-card-title">🏆 この記事の結論 — おすすめランキング</h2>
+              <div className="ranking-card-list">
+                {article.ranking.map((item) => {
+                  const medalIcons: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
+                  const medal = medalIcons[item.rank] || `${item.rank}位`;
+                  const fullStars = Math.floor(item.rating);
+                  const halfStar = item.rating % 1 >= 0.5;
+                  const stars = '★'.repeat(fullStars) + (halfStar ? '☆' : '') + '☆'.repeat(5 - fullStars - (halfStar ? 1 : 0));
+                  return (
+                    <div key={item.rank} className={`ranking-item ranking-item-${item.rank}`}>
+                      <span className="ranking-medal">{medal}</span>
+                      <div className="ranking-info">
+                        <span className="ranking-name">{item.name}</span>
+                        <div className="ranking-stars">
+                          <span className="ranking-stars-filled">{stars.slice(0, fullStars + (halfStar ? 1 : 0))}</span>
+                          <span className="ranking-stars-empty">{stars.slice(fullStars + (halfStar ? 1 : 0))}</span>
+                          <span className="ranking-score">{item.rating.toFixed(1)}</span>
+                        </div>
+                        <span className="ranking-comment">{item.comment}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* 目次 */}
           <nav className="toc">
             <h2 className="toc-title">📋 この記事の内容</h2>
