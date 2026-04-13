@@ -118,52 +118,90 @@ def fetch_unsplash_images(query: str, count: int = 8) -> list[dict]:
 # 楽天商品検索API
 # ================================================
 RAKUTEN_APP_ID = os.environ.get("RAKUTEN_APP_ID", "")
+RAKUTEN_ACCESS_KEY = os.environ.get("RAKUTEN_ACCESS_KEY", "")
 RAKUTEN_AFFILIATE_ID = os.environ.get("RAKUTEN_AFFILIATE_ID", "")
 
-def search_rakuten_product(product_name: str) -> dict | None:
-    """楽天商品検索APIで商品を検索し、画像URL・アフィリエイトリンク・価格を返す"""
-    if not RAKUTEN_APP_ID:
-        print(f"  ⚠️ RAKUTEN_APP_ID not set, skipping product search for: {product_name}")
-        return None
+def clean_product_name(name: str) -> str:
+    """Geminiの創作的な商品名からコア部分を抽出"""
+    import re as _re
+    # 装飾を除去: 「！」「！」「♪」「★」「◎」「●」「【】」
+    name = _re.sub(r'[！!♪★◎●【】「」]', '', name)
+    # 先頭の煽り文句を除去: 「ピタッと吸着」「鮮度爆上げ」等
+    name = _re.sub(r'^[ぁ-ん\u30A0-\u30FFー]+[！!]?\s*', '', name)
+    # 余分なスペースを整理
+    name = _re.sub(r'\s+', ' ', name).strip()
+    # 長すぎる場合は最初の30文字に切る
+    if len(name) > 30:
+        name = name[:30]
+    return name
 
+def _rakuten_search(keyword: str) -> dict | None:
+    """楽天商品検索API呼び出し（内部関数）"""
     params = urllib.parse.urlencode({
         "format": "json",
-        "keyword": product_name,
+        "keyword": keyword,
         "applicationId": RAKUTEN_APP_ID,
+        "accessKey": RAKUTEN_ACCESS_KEY,
         "affiliateId": RAKUTEN_AFFILIATE_ID,
         "hits": 1,
-        "sort": "-reviewCount",  # レビュー数順で信頼性の高い商品を取得
-        "imageFlag": 1,
+        "sort": "-reviewCount",
     })
-    url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?{params}"
+    url = f"https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260401?{params}"
 
     try:
-        req = urllib.request.Request(url)
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://kattehaikenai.com/",
+            "Origin": "https://kattehaikenai.com",
+        })
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = json.loads(resp.read().decode("utf-8"))
             items = data.get("Items", [])
             if not items:
-                print(f"  ⚠️ No results for: {product_name}")
                 return None
 
             item = items[0]["Item"]
             image_urls = item.get("mediumImageUrls", [])
             image_url = image_urls[0]["imageUrl"] if image_urls else ""
-            # 高解像度画像に変換（128→256）
+            # 高解像度画像に変換
             image_url = image_url.replace("?_ex=128x128", "?_ex=256x256") if image_url else ""
 
-            result = {
+            return {
                 "imageUrl": image_url,
                 "affiliateUrl": item.get("affiliateUrl", item.get("itemUrl", "")),
                 "price": f"¥{int(item.get('itemPrice', 0)):,}",
             }
-            print(f"  ✅ Found: {product_name} → {result['price']}")
-            return result
     except Exception as e:
-        print(f"  ⚠️ Rakuten API error for {product_name}: {e}")
+        print(f"    ⚠️ API call failed: {e}")
         return None
     finally:
-        time.sleep(0.5)  # レート制限対策
+        time.sleep(1)  # レート制限対策
+
+def search_rakuten_product(product_name: str) -> dict | None:
+    """楽天商品検索（クリーンアップ + フォールバック）"""
+    if not RAKUTEN_APP_ID:
+        print(f"  ⚠️ RAKUTEN_APP_ID not set, skipping: {product_name}")
+        return None
+
+    # Step 1: クリーンアップした名前で検索
+    cleaned = clean_product_name(product_name)
+    print(f"  🔍 Searching: {cleaned}")
+    result = _rakuten_search(cleaned)
+    if result:
+        print(f"  ✅ Found: {cleaned} → {result['price']}")
+        return result
+
+    # Step 2: さらに短くして検索（最初の2-3単語）
+    short_name = ' '.join(cleaned.split()[:3])
+    if short_name != cleaned:
+        print(f"  🔍 Retry with: {short_name}")
+        result = _rakuten_search(short_name)
+        if result:
+            print(f"  ✅ Found: {short_name} → {result['price']}")
+            return result
+
+    print(f"  ⚠️ No results for: {product_name}")
+    return None
 
 def enrich_ranking_with_rakuten(ranking_items: list[dict]) -> list[dict]:
     """ランキングの各商品に楽天APIの情報を付与する"""
@@ -177,6 +215,7 @@ def enrich_ranking_with_rakuten(ranking_items: list[dict]) -> list[dict]:
             item["imageUrl"] = product_data["imageUrl"]
             item["affiliateUrl"] = product_data["affiliateUrl"]
             item["price"] = product_data["price"]
+
 
     return ranking_items
 
