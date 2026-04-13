@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://kattehaikenai.com/sitemap.xml',
+    sitemap: 'https://kattehaikenai-blog.pages.dev/sitemap.xml',
   };
 }

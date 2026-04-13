@@ -4,7 +4,7 @@ import { articles } from '@/content/articles';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://kattehaikenai.com';
+  const baseUrl = 'https://kattehaikenai-blog.pages.dev';
 
   const staticPages = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1 },

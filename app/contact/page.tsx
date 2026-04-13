@@ -16,7 +16,7 @@ export default function ContactPage() {
           <h2>お問い合わせ方法</h2>
           <p>当サイトへのお問い合わせは、下記メールアドレスまでお願いいたします。</p>
           <div className="contact-email-box">
-            <p className="contact-email">📧 info@kattehaikenai.com</p>
+            <p className="contact-email">📧 info@imadoki-media.com</p>
           </div>
           <p>通常、2〜3営業日以内にご返信させていただきます。</p>
         </section>

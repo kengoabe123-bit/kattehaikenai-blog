@@ -66,8 +66,8 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://kattehaikenai.com/' },
-      { '@type': 'ListItem', position: 2, name: cat.label, item: `https://kattehaikenai.com/category/${article.category}` },
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://kattehaikenai-blog.pages.dev/' },
+      { '@type': 'ListItem', position: 2, name: cat.label, item: `https://kattehaikenai-blog.pages.dev/category/${article.category}` },
       { '@type': 'ListItem', position: 3, name: article.title },
     ],
   };
@@ -220,7 +220,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             <p className="share-title">この記事をシェア</p>
             <div className="share-links">
               <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(`https://kattehaikenai.com/blog/${article.slug}`)}`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(`https://kattehaikenai-blog.pages.dev/blog/${article.slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="share-btn share-x"
@@ -228,7 +228,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                 Xでシェア
               </a>
               <a
-                href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://kattehaikenai.com/blog/${article.slug}`)}`}
+                href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://kattehaikenai-blog.pages.dev/blog/${article.slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="share-btn share-line"
@@ -236,7 +236,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                 LINEで送る
               </a>
               <a
-                href={`https://b.hatena.ne.jp/entry/${encodeURIComponent(`https://kattehaikenai.com/blog/${article.slug}`)}`}
+                href={`https://b.hatena.ne.jp/entry/${encodeURIComponent(`https://kattehaikenai-blog.pages.dev/blog/${article.slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="share-btn share-hatena"
