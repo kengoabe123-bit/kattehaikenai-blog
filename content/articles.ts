@@ -24,6 +24,9 @@ export interface RankingItem {
   name: string;
   rating: number;
   comment: string;
+  imageUrl?: string;      // 楽天APIから自動取得
+  affiliateUrl?: string;  // 楽天アフィリエイトリンク
+  price?: string;         // 価格表示
 }
 
 export interface Section {

@@ -129,7 +129,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             <img src={article.heroImage} alt={article.heroImageAlt} />
           </div>
 
-          {/* ランキングカード（Remotion風デザイン） */}
+          {/* ランキングカード（Remotion風 + 商品画像付き） */}
           {article.ranking && article.ranking.length > 0 && (
             <div className="ranking-card">
               <h2 className="ranking-card-title">この記事の結論 — おすすめTOP{article.ranking.length}</h2>
@@ -150,9 +150,30 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                         <span className="ranking-badge-num">{item.rank}</span>
                         <span className="ranking-badge-label">位</span>
                       </div>
+                      {item.imageUrl && (
+                        <a
+                          href={item.affiliateUrl || '#'}
+                          target="_blank"
+                          rel="noopener noreferrer nofollow"
+                          className="ranking-img-link"
+                        >
+                          <img src={item.imageUrl} alt={item.name} className="ranking-product-img" />
+                        </a>
+                      )}
                       <div className="ranking-row-body">
                         <span className="ranking-row-title">{item.name}</span>
+                        {item.price && <span className="ranking-row-price">{item.price}</span>}
                         <span className="ranking-row-sub">{item.comment}</span>
+                        {item.affiliateUrl && (
+                          <a
+                            href={item.affiliateUrl}
+                            target="_blank"
+                            rel="noopener noreferrer nofollow"
+                            className="ranking-row-cta"
+                          >
+                            楽天で見る →
+                          </a>
+                        )}
                       </div>
                     </div>
                   );

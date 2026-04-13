@@ -115,6 +115,73 @@ def fetch_unsplash_images(query: str, count: int = 8) -> list[dict]:
 
 
 # ================================================
+# 楽天商品検索API
+# ================================================
+RAKUTEN_APP_ID = os.environ.get("RAKUTEN_APP_ID", "")
+RAKUTEN_AFFILIATE_ID = os.environ.get("RAKUTEN_AFFILIATE_ID", "")
+
+def search_rakuten_product(product_name: str) -> dict | None:
+    """楽天商品検索APIで商品を検索し、画像URL・アフィリエイトリンク・価格を返す"""
+    if not RAKUTEN_APP_ID:
+        print(f"  ⚠️ RAKUTEN_APP_ID not set, skipping product search for: {product_name}")
+        return None
+
+    params = urllib.parse.urlencode({
+        "format": "json",
+        "keyword": product_name,
+        "applicationId": RAKUTEN_APP_ID,
+        "affiliateId": RAKUTEN_AFFILIATE_ID,
+        "hits": 1,
+        "sort": "-reviewCount",  # レビュー数順で信頼性の高い商品を取得
+        "imageFlag": 1,
+    })
+    url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?{params}"
+
+    try:
+        req = urllib.request.Request(url)
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            items = data.get("Items", [])
+            if not items:
+                print(f"  ⚠️ No results for: {product_name}")
+                return None
+
+            item = items[0]["Item"]
+            image_urls = item.get("mediumImageUrls", [])
+            image_url = image_urls[0]["imageUrl"] if image_urls else ""
+            # 高解像度画像に変換（128→256）
+            image_url = image_url.replace("?_ex=128x128", "?_ex=256x256") if image_url else ""
+
+            result = {
+                "imageUrl": image_url,
+                "affiliateUrl": item.get("affiliateUrl", item.get("itemUrl", "")),
+                "price": f"¥{int(item.get('itemPrice', 0)):,}",
+            }
+            print(f"  ✅ Found: {product_name} → {result['price']}")
+            return result
+    except Exception as e:
+        print(f"  ⚠️ Rakuten API error for {product_name}: {e}")
+        return None
+    finally:
+        time.sleep(0.5)  # レート制限対策
+
+def enrich_ranking_with_rakuten(ranking_items: list[dict]) -> list[dict]:
+    """ランキングの各商品に楽天APIの情報を付与する"""
+    if not RAKUTEN_APP_ID:
+        return ranking_items
+
+    print("  🛒 Enriching ranking items with Rakuten product data...")
+    for item in ranking_items:
+        product_data = search_rakuten_product(item["name"])
+        if product_data:
+            item["imageUrl"] = product_data["imageUrl"]
+            item["affiliateUrl"] = product_data["affiliateUrl"]
+            item["price"] = product_data["price"]
+
+    return ranking_items
+
+
+# ================================================
 # キーワードローテーション
 # ================================================
 def load_used_keywords() -> list[str]:
@@ -429,7 +496,18 @@ def build_trend_article_ts_entry(article: dict, images: list[dict], today: str, 
             r_comment = str(r.get("comment", "")).replace("'", "\\'")
             r_rank = r.get("rank", 0)
             r_rating = r.get("rating", 0)
-            ranking_entries.append(f"""      {{ rank: {r_rank}, name: '{r_name}', rating: {r_rating}, comment: '{r_comment}' }}""")
+            r_image = str(r.get("imageUrl", "")).replace("'", "\\'")
+            r_aff = str(r.get("affiliateUrl", "")).replace("'", "\\'")
+            r_price = str(r.get("price", "")).replace("'", "\\'")
+            entry = f"      {{ rank: {r_rank}, name: '{r_name}', rating: {r_rating}, comment: '{r_comment}'"
+            if r_image:
+                entry += f", imageUrl: '{r_image}'"
+            if r_aff:
+                entry += f", affiliateUrl: '{r_aff}'"
+            if r_price:
+                entry += f", price: '{r_price}'"
+            entry += " }"
+            ranking_entries.append(entry)
         ranking_joined = ",\n".join(ranking_entries)
         ranking_ts = f"""
     ranking: [
@@ -562,6 +640,10 @@ def main():
             print(f"  🔍 Image query: {image_query}")
             images = fetch_unsplash_images(image_query, 8)
             print(f"  ✅ {len(images)} images fetched")
+
+            # 2.5. ランキング商品に楽天APIデータを付与
+            if article.get("ranking"):
+                article["ranking"] = enrich_ranking_with_rakuten(article["ranking"])
 
             # 3. articles.ts更新
             print(f"  📄 Updating articles.ts...")
