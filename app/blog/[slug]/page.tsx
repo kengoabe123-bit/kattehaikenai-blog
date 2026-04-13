@@ -129,28 +129,30 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             <img src={article.heroImage} alt={article.heroImageAlt} />
           </div>
 
-          {/* ランキングカード（結論ファースト） */}
+          {/* ランキングカード（Remotion風デザイン） */}
           {article.ranking && article.ranking.length > 0 && (
             <div className="ranking-card">
-              <h2 className="ranking-card-title">🏆 この記事の結論 — おすすめランキング</h2>
+              <h2 className="ranking-card-title">この記事の結論 — おすすめTOP{article.ranking.length}</h2>
               <div className="ranking-card-list">
                 {article.ranking.map((item) => {
-                  const medalIcons: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
-                  const medal = medalIcons[item.rank] || `${item.rank}位`;
-                  const fullStars = Math.floor(item.rating);
-                  const halfStar = item.rating % 1 >= 0.5;
-                  const stars = '★'.repeat(fullStars) + (halfStar ? '☆' : '') + '☆'.repeat(5 - fullStars - (halfStar ? 1 : 0));
+                  const rankColors: Record<number, string> = {
+                    1: '#e63946',
+                    2: '#f4845f',
+                    3: '#f4a261',
+                    4: '#a8dadc',
+                    5: '#b8c0cc',
+                  };
+                  const bgColor = rankColors[item.rank] || '#d4d4d8';
+                  const isTop3 = item.rank <= 3;
                   return (
-                    <div key={item.rank} className={`ranking-item ranking-item-${item.rank}`}>
-                      <span className="ranking-medal">{medal}</span>
-                      <div className="ranking-info">
-                        <span className="ranking-name">{item.name}</span>
-                        <div className="ranking-stars">
-                          <span className="ranking-stars-filled">{stars.slice(0, fullStars + (halfStar ? 1 : 0))}</span>
-                          <span className="ranking-stars-empty">{stars.slice(fullStars + (halfStar ? 1 : 0))}</span>
-                          <span className="ranking-score">{item.rating.toFixed(1)}</span>
-                        </div>
-                        <span className="ranking-comment">{item.comment}</span>
+                    <div key={item.rank} className={`ranking-row ${isTop3 ? 'ranking-row-top' : ''}`}>
+                      <div className="ranking-badge" style={{ backgroundColor: bgColor }}>
+                        <span className="ranking-badge-num">{item.rank}</span>
+                        <span className="ranking-badge-label">位</span>
+                      </div>
+                      <div className="ranking-row-body">
+                        <span className="ranking-row-title">{item.name}</span>
+                        <span className="ranking-row-sub">{item.comment}</span>
                       </div>
                     </div>
                   );
@@ -301,33 +303,37 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
 
         {/* サイドバー */}
         <aside className="sidebar">
-          {/* サイドバーバナー1（上部） */}
+          {/* サイドバーバナー1（上部・300×250px固定枠） */}
           <div className="sidebar-block sidebar-ad">
-            <div className="sidebar-ad-slot" id="sidebar-ad-top">
-              {/* A8.net / AdSenseバナーをここに挿入 */}
+            <div className="sidebar-ad-slot sidebar-ad-fixed" id="sidebar-ad-top">
               {(() => {
                 const affiliates = getAffiliatesForCategory(article.category);
                 const topAff = affiliates[0];
                 if (!topAff) return (
                   <div className="sidebar-ad-placeholder">
-                    <span>📢</span>
                     <p>PR</p>
                   </div>
                 );
+                // bannerHtmlがあればそれを使用（A8.net画像バナー）
+                if (topAff.bannerHtml) {
+                  return (
+                    <div
+                      className="sidebar-banner-html"
+                      dangerouslySetInnerHTML={{ __html: topAff.bannerHtml }}
+                    />
+                  );
+                }
+                // フォールバック：テキストバナー
                 return (
                   <a
                     href={topAff.url}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="sidebar-aff-banner"
-                    style={{ background: topAff.brandGradient }}
+                    className="sidebar-aff-simple"
                   >
-                    <span className="sidebar-aff-icon">{topAff.icon}</span>
                     <span className="sidebar-aff-name">{topAff.serviceName}</span>
                     <span className="sidebar-aff-catch">{topAff.catchcopy}</span>
-                    <span className="sidebar-aff-btn" style={{ background: topAff.buttonGradient }}>
-                      {topAff.buttonLabel}
-                    </span>
+                    <span className="sidebar-aff-cta">{topAff.buttonLabel} →</span>
                     <img src={topAff.trackingPixel} width={1} height={1} alt="" style={{ border: 0, position: 'absolute', opacity: 0 }} />
                   </a>
                 );
@@ -354,27 +360,31 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             </ul>
           </div>
 
-          {/* サイドバーバナー2（下部） */}
+          {/* サイドバーバナー2（下部・300×250px固定枠） */}
           <div className="sidebar-block sidebar-ad">
-            <div className="sidebar-ad-slot" id="sidebar-ad-bottom">
+            <div className="sidebar-ad-slot sidebar-ad-fixed" id="sidebar-ad-bottom">
               {(() => {
                 const affiliates = getAffiliatesForCategory(article.category);
                 const bottomAff = affiliates[1];
                 if (!bottomAff) return null;
+                if (bottomAff.bannerHtml) {
+                  return (
+                    <div
+                      className="sidebar-banner-html"
+                      dangerouslySetInnerHTML={{ __html: bottomAff.bannerHtml }}
+                    />
+                  );
+                }
                 return (
                   <a
                     href={bottomAff.url}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="sidebar-aff-banner"
-                    style={{ background: bottomAff.brandGradient }}
+                    className="sidebar-aff-simple"
                   >
-                    <span className="sidebar-aff-icon">{bottomAff.icon}</span>
                     <span className="sidebar-aff-name">{bottomAff.serviceName}</span>
                     <span className="sidebar-aff-catch">{bottomAff.catchcopy}</span>
-                    <span className="sidebar-aff-btn" style={{ background: bottomAff.buttonGradient }}>
-                      {bottomAff.buttonLabel}
-                    </span>
+                    <span className="sidebar-aff-cta">{bottomAff.buttonLabel} →</span>
                     <img src={bottomAff.trackingPixel} width={1} height={1} alt="" style={{ border: 0, position: 'absolute', opacity: 0 }} />
                   </a>
                 );

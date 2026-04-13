@@ -15,6 +15,7 @@ export interface A8Affiliate {
   buttonGradient: string;
   url: string;
   trackingPixel: string;
+  bannerHtml?: string;  // A8.net画像バナーHTMLコード（300×250px推奨）
 }
 
 // ── 登録済みアフィリエイトリンク ──

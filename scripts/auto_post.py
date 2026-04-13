@@ -237,6 +237,17 @@ def build_trend_article_prompt(keyword: str, site_name: str) -> str:
 - 強調: <strong>タグ
 - 比較表: HTMLの<table>タグで作成。比較表は必ず1つ以上入れる
 
+### ★ 装飾BOX（必ず使うこと）
+以下のclass付き<div>を本文中に積極的に使用して、読みやすさを向上させること。
+各セクションに最低1つは装飾BOXを含めること。
+
+- ポイントBOX（重要情報）: <div class="point-box">ここに重要なポイントを記載</div>
+- 注意BOX（注意喚起）: <div class="warning-box">ここに注意事項を記載</div>
+- チェックリスト: <div class="check-box"><ul><li>チェック項目1</li><li>チェック項目2</li></ul></div>
+- メリットBOX: <div class="merit-box"><ul><li>メリット1</li><li>メリット2</li></ul></div>
+- デメリットBOX: <div class="demerit-box"><ul><li>デメリット1</li><li>デメリット2</li></ul></div>
+- Q&A: <div class="qa-item"><div class="qa-q">質問内容</div><div class="qa-a">回答内容</div></div>
+
 ### SEO要件
 - タイトルにメインキーワードを含める
 - H2見出しにキーワードまたは関連ワードを含める
@@ -245,8 +256,8 @@ def build_trend_article_prompt(keyword: str, site_name: str) -> str:
 - 読者に「次のアクション」を促す文で締める
 
 ### カテゴリ判定ルール
+- 生活・季節イベント・グルメ・100均・便利グッズ・節約・引越し → lifestyle
 - ドラマ・映画・芸能・音楽・ゲーム → entertainment
-- 生活・季節イベント・グルメ・100均・便利グッズ → lifestyle
 - 野球・サッカー・オリンピック・スポーツ選手 → sports
 
 ### 文体
