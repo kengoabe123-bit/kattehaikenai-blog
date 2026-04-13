@@ -1,0 +1,67 @@
+name: Trend Blog Auto Post
+
+on:
+  schedule:
+    # 毎朝7:00 JST = UTC 22:00（前日）
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+    inputs:
+      articles_count:
+        description: '生成する記事数（デフォルト5）'
+        required: false
+        default: '5'
+
+permissions:
+  contents: write
+
+jobs:
+  auto-post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate articles
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+        run: |
+          ARTICLES_COUNT="${{ github.event.inputs.articles_count || '5' }}"
+          python scripts/auto_post.py "$ARTICLES_COUNT"
+
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Configure Git
+        run: |
+          git config user.name "Blog Auto-Poster"
+          git config user.email "auto-poster@kattehaikenai.com"
+
+      - name: Commit and Push
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            ARTICLE_COUNT=$(git diff --cached --name-only | grep -c "articles.ts" || echo "0")
+            git commit -m "auto: Add articles $(date +%Y-%m-%d)"
+            git push
+            echo "✅ Changes pushed successfully"
+          fi
