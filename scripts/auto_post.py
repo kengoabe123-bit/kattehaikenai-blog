@@ -459,10 +459,42 @@ def main():
             article = parse_gemini_response(response)
             print(f"  ✅ Article generated: {article.get('title', 'N/A')[:50]}...")
 
-            # 2. 画像取得
+            # 2. 画像取得（キーワードから動的クエリ生成）
             print(f"  🖼️  Fetching images...")
-            query = image_queries[i % len(image_queries)]
-            images = fetch_unsplash_images(query, 8)
+            # キーワードからUnsplash検索用の英語クエリを生成
+            kw_to_en = {
+                'ドラマ': 'drama', '映画': 'movie', '芸能': 'celebrity',
+                '野球': 'baseball', 'サッカー': 'soccer', 'スポーツ': 'sports',
+                '旅行': 'travel japan', '温泉': 'hot spring japan', 'キャンプ': 'camping',
+                'グルメ': 'japanese food', '料理': 'cooking', 'スイーツ': 'sweets',
+                '梅雨': 'rainy season', '花火': 'fireworks japan', '桜': 'cherry blossom',
+                '夏': 'summer japan', '冬': 'winter japan', '春': 'spring japan', '秋': 'autumn japan',
+                '節約': 'saving money', '一人暮らし': 'apartment living', '新生活': 'new life',
+                '100均': 'daily goods', 'ダイソー': 'household items', 'コストコ': 'shopping',
+                'ユニクロ': 'fashion casual', 'GU': 'fashion', 'ワークマン': 'outdoor wear',
+                'iPhone': 'iphone', 'スマホ': 'smartphone', 'AI': 'artificial intelligence',
+                'ディズニー': 'disneyland', 'USJ': 'theme park', '沖縄': 'okinawa',
+                '北海道': 'hokkaido', '京都': 'kyoto', '台湾': 'taiwan travel',
+                'ダイエット': 'fitness', '健康': 'health', '筋トレ': 'gym workout',
+                '花粉症': 'allergy', '睡眠': 'sleep', '対策': 'solution',
+                'おすすめ': 'recommendation', 'ランキング': 'ranking', 'グッズ': 'goods',
+                'プレゼント': 'gift', '母の日': 'mothers day', '父の日': 'fathers day',
+                'GW': 'golden week japan', 'お盆': 'obon japan', 'ハロウィン': 'halloween',
+                'クリスマス': 'christmas', '福袋': 'lucky bag japan',
+                'NISA': 'investment', '確定申告': 'tax return', 'ふるさと納税': 'hometown tax',
+                '甲子園': 'high school baseball', '駅伝': 'marathon', '大相撲': 'sumo',
+                'Netflix': 'streaming', 'Amazon': 'online shopping',
+            }
+            # キーワードの各語を英訳してクエリ作成
+            en_parts = []
+            for part in keyword.split():
+                if part in kw_to_en:
+                    en_parts.append(kw_to_en[part])
+                elif part.isascii():
+                    en_parts.append(part)
+            image_query = ' '.join(en_parts[:3]) if en_parts else 'japan lifestyle'
+            print(f"  🔍 Image query: {image_query}")
+            images = fetch_unsplash_images(image_query, 8)
             print(f"  ✅ {len(images)} images fetched")
 
             # 3. articles.ts更新

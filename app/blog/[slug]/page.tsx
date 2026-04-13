@@ -271,6 +271,40 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
 
         {/* サイドバー */}
         <aside className="sidebar">
+          {/* サイドバーバナー1（上部） */}
+          <div className="sidebar-block sidebar-ad">
+            <div className="sidebar-ad-slot" id="sidebar-ad-top">
+              {/* A8.net / AdSenseバナーをここに挿入 */}
+              {(() => {
+                const affiliates = getAffiliatesForCategory(article.category);
+                const topAff = affiliates[0];
+                if (!topAff) return (
+                  <div className="sidebar-ad-placeholder">
+                    <span>📢</span>
+                    <p>PR</p>
+                  </div>
+                );
+                return (
+                  <a
+                    href={topAff.url}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="sidebar-aff-banner"
+                    style={{ background: topAff.brandGradient }}
+                  >
+                    <span className="sidebar-aff-icon">{topAff.icon}</span>
+                    <span className="sidebar-aff-name">{topAff.serviceName}</span>
+                    <span className="sidebar-aff-catch">{topAff.catchcopy}</span>
+                    <span className="sidebar-aff-btn" style={{ background: topAff.buttonGradient }}>
+                      {topAff.buttonLabel}
+                    </span>
+                    <img src={topAff.trackingPixel} width={1} height={1} alt="" style={{ border: 0, position: 'absolute', opacity: 0 }} />
+                  </a>
+                );
+              })()}
+            </div>
+          </div>
+
           <div className="sidebar-block">
             <h3 className="sidebar-title">カテゴリ</h3>
             <ul className="sidebar-categories">
@@ -287,6 +321,49 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                   </li>
                 );
               })}
+            </ul>
+          </div>
+
+          {/* サイドバーバナー2（下部） */}
+          <div className="sidebar-block sidebar-ad">
+            <div className="sidebar-ad-slot" id="sidebar-ad-bottom">
+              {(() => {
+                const affiliates = getAffiliatesForCategory(article.category);
+                const bottomAff = affiliates[1];
+                if (!bottomAff) return null;
+                return (
+                  <a
+                    href={bottomAff.url}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="sidebar-aff-banner"
+                    style={{ background: bottomAff.brandGradient }}
+                  >
+                    <span className="sidebar-aff-icon">{bottomAff.icon}</span>
+                    <span className="sidebar-aff-name">{bottomAff.serviceName}</span>
+                    <span className="sidebar-aff-catch">{bottomAff.catchcopy}</span>
+                    <span className="sidebar-aff-btn" style={{ background: bottomAff.buttonGradient }}>
+                      {bottomAff.buttonLabel}
+                    </span>
+                    <img src={bottomAff.trackingPixel} width={1} height={1} alt="" style={{ border: 0, position: 'absolute', opacity: 0 }} />
+                  </a>
+                );
+              })()}
+            </div>
+          </div>
+
+          {/* 人気記事 */}
+          <div className="sidebar-block">
+            <h3 className="sidebar-title">人気記事</h3>
+            <ul className="sidebar-popular">
+              {articles.slice(0, 5).map((a, i) => (
+                <li key={a.id}>
+                  <Link href={`/blog/${a.slug}`} className="sidebar-popular-item">
+                    <span className="sidebar-popular-rank">{i + 1}</span>
+                    <span className="sidebar-popular-title">{a.title}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </aside>
