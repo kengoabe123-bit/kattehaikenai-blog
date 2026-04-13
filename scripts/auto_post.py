@@ -23,13 +23,15 @@ SITE_DIR = SCRIPT_DIR.parent  # trend-blog のルート
 CONFIG_PATH = SCRIPT_DIR / "config.json"
 USED_KEYWORDS_PATH = SCRIPT_DIR / "used_keywords.json"
 
-# ================================================
-# Gemini API
-# ================================================
-def call_gemini(prompt: str, max_retries: int = 3) -> str:
-    """Gemini APIを呼び出して記事テキストを生成"""
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+# Gemini モデル優先順位（上から順に試行）
+GEMINI_MODELS = [
+    "gemini-2.5-flash",
+    "gemini-flash-latest",
+    "gemini-2.5-pro",
+]
 
+def call_gemini(prompt: str, max_retries: int = 3) -> str:
+    """Gemini APIを呼び出して記事テキストを生成（フォールバック対応）"""
     payload = json.dumps({
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -38,25 +40,50 @@ def call_gemini(prompt: str, max_retries: int = 3) -> str:
         }
     })
 
-    for attempt in range(max_retries):
-        try:
-            req = urllib.request.Request(
-                url,
-                data=payload.encode("utf-8"),
-                headers={"Content-Type": "application/json"},
-                method="POST"
-            )
-            with urllib.request.urlopen(req, timeout=120) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-                return data["candidates"][0]["content"]["parts"][0]["text"]
-        except Exception as e:
-            print(f"  ⚠️ Gemini API error (attempt {attempt+1}/{max_retries}): {e}")
-            if attempt < max_retries - 1:
-                wait = 15 * (attempt + 1)
-                print(f"  ⏳ Waiting {wait}s before retry...")
-                time.sleep(wait)
+    for model in GEMINI_MODELS:
+        print(f"  🔄 Trying model: {model}")
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}"
 
-    raise RuntimeError("Gemini API call failed after all retries")
+        for attempt in range(max_retries):
+            try:
+                req = urllib.request.Request(
+                    url,
+                    data=payload.encode("utf-8"),
+                    headers={"Content-Type": "application/json"},
+                    method="POST"
+                )
+                with urllib.request.urlopen(req, timeout=180) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    text = data["candidates"][0]["content"]["parts"][0]["text"]
+                    print(f"  ✅ Success with model: {model}")
+                    return text
+            except urllib.error.HTTPError as e:
+                print(f"  ⚠️ {model} HTTP {e.code} (attempt {attempt+1}/{max_retries})")
+                if e.code in (503, 429):
+                    # サーバー障害 or レート制限 → リトライ
+                    if attempt < max_retries - 1:
+                        wait = 20 * (attempt + 1)
+                        print(f"  ⏳ Waiting {wait}s before retry...")
+                        time.sleep(wait)
+                    else:
+                        print(f"  ⏭️ Switching to next model...")
+                        break  # 次のモデルへ
+                elif e.code == 404:
+                    print(f"  ⏭️ Model {model} not available, switching...")
+                    break  # 次のモデルへ
+                else:
+                    if attempt < max_retries - 1:
+                        wait = 15 * (attempt + 1)
+                        print(f"  ⏳ Waiting {wait}s before retry...")
+                        time.sleep(wait)
+            except Exception as e:
+                print(f"  ⚠️ {model} error (attempt {attempt+1}/{max_retries}): {e}")
+                if attempt < max_retries - 1:
+                    wait = 15 * (attempt + 1)
+                    print(f"  ⏳ Waiting {wait}s before retry...")
+                    time.sleep(wait)
+
+    raise RuntimeError("Gemini API call failed with all models after all retries")
 
 
 # ================================================
