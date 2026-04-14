@@ -46,9 +46,9 @@ export interface AffiliateLink {
 }
 
 export const CATEGORIES = {
-  lifestyle: { label: '暮らし', color: '#0f3460' },
-  seasonal: { label: '季節・イベント', color: '#e94560' },
-  money: { label: '節約・おトク', color: '#16a085' },
+  lifestyle: { label: '暮らし', color: '#C07850' },
+  seasonal: { label: '季節・イベント', color: '#D4845A' },
+  money: { label: '節約・おトク', color: '#8B9E82' },
 } as const;
 
 export type CategoryKey = keyof typeof CATEGORIES;
