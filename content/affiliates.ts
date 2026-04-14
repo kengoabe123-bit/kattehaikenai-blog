@@ -72,7 +72,7 @@ export const AFFILIATES: Record<string, A8Affiliate> = {
     buttonGradient: 'linear-gradient(135deg, #ff4444, #cc0000)',
     url: 'https://rpx.a8.net/svt/ejp?a8mat=3BSJRH+E691I2+2HOM+6C1VM&rakuten=y&a8ejpredirect=http%3A%2F%2Fhb.afl.rakuten.co.jp%2Fhgc%2F0ea62065.34400275.0ea62066.204f04c0%2Fa20120616688_3BSJRH_E691I2_2HOM_6C1VM%3Fpc%3Dhttp%253A%252F%252Fwww.rakuten.co.jp%252F%26m%3Dhttp%253A%252F%252Fm.rakuten.co.jp%252F',
     trackingPixel: 'https://www10.a8.net/0.gif?a8mat=3BSJRH+E691I2+2HOM+6C1VM',
-    bannerHtml: '<a href="https://rpx.a8.net/svt/ejp?a8mat=3BSJRH+E691I2+2HOM+614CX&rakuten=y&a8ejpredirect=http%3A%2F%2Fhb.afl.rakuten.co.jp%2Fhgc%2F0ea62065.34400275.0ea62066.204f04c0%2Fa20120616688_3BSJRH_E691I2_2HOM_614CX%3Fpc%3Dhttp%253A%252F%252Fwww.rakuten.co.jp%252F%26m%3Dhttp%253A%252F%252Fm.rakuten.co.jp%252F" rel="nofollow"><img src="http://hbb.afl.rakuten.co.jp/hsb/0eb4bbd1.4a494107.0eb4bbaa.95151395/" border="0" style="max-width:100%;height:auto"></a><img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=3BSJRH+E691I2+2HOM+614CX" alt="">',
+    bannerHtml: '<a href="https://rpx.a8.net/svt/ejp?a8mat=3BSJRH+E691I2+2HOM+62U35&rakuten=y&a8ejpredirect=http%3A%2F%2Fhb.afl.rakuten.co.jp%2Fhgc%2F0ea62065.34400275.0ea62066.204f04c0%2Fa20120616688_3BSJRH_E691I2_2HOM_62U35%3Fpc%3Dhttp%253A%252F%252Fwww.rakuten.co.jp%252F%26m%3Dhttp%253A%252F%252Fm.rakuten.co.jp%252F" rel="nofollow"><img src="http://hbb.afl.rakuten.co.jp/hsb/0eb4bbdb.d3e5aa19.0eb4bbaa.95151395/" border="0" style="max-width:100%;height:auto"></a><img border="0" width="1" height="1" src="https://www11.a8.net/0.gif?a8mat=3BSJRH+E691I2+2HOM+62U35" alt="">',
   },
   'rakuten-travel': {
     id: 'rakuten-travel',
@@ -90,7 +90,7 @@ export const AFFILIATES: Record<string, A8Affiliate> = {
     buttonGradient: 'linear-gradient(135deg, #0088cc, #006699)',
     url: 'https://rpx.a8.net/svt/ejp?a8mat=3BSJRH+E691I2+2HOM+6KMIQ&rakuten=y&a8ejpredirect=http%3A%2F%2Fhb.afl.rakuten.co.jp%2Fhgc%2F0eb4779e.5d30c5ba.0eb4779f.b871e4e3%2Fa20120616688_3BSJRH_E691I2_2HOM_6KMIQ%3Fpc%3Dhttp%253A%252F%252Ftravel.rakuten.co.jp%252F%26m%3Dhttp%253A%252F%252Ftravel.rakuten.co.jp%252F',
     trackingPixel: 'https://www18.a8.net/0.gif?a8mat=3BSJRH+E691I2+2HOM+6KMIQ',
-    bannerHtml: '<a href="https://rpx.a8.net/svt/ejp?a8mat=3BSJRH+E691I2+2HOM+6I9N5&rakuten=y&a8ejpredirect=http%3A%2F%2Fhb.afl.rakuten.co.jp%2Fhgc%2F0eb4779e.5d30c5ba.0eb4779f.b871e4e3%2Fa20120616688_3BSJRH_E691I2_2HOM_6I9N5%3Fpc%3Dhttp%253A%252F%252Ftravel.rakuten.co.jp%252F%26m%3Dhttp%253A%252F%252Ftravel.rakuten.co.jp%252F" rel="nofollow"><img src="http://hbb.afl.rakuten.co.jp/hsb/0ea7f9a4.79280dcb.0ea7f99d.1ac92fca/153145/" border="0" style="max-width:100%;height:auto"></a><img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=3BSJRH+E691I2+2HOM+6I9N5" alt="">',
+    bannerHtml: '<a href="https://rpx.a8.net/svt/ejp?a8mat=3BSJRH+E691I2+2HOM+6JRNL&rakuten=y&a8ejpredirect=http%3A%2F%2Fhb.afl.rakuten.co.jp%2Fhgc%2F0eb4779e.5d30c5ba.0eb4779f.b871e4e3%2Fa20120616688_3BSJRH_E691I2_2HOM_6JRNL%3Fpc%3Dhttp%253A%252F%252Ftravel.rakuten.co.jp%252F%26m%3Dhttp%253A%252F%252Ftravel.rakuten.co.jp%252F" rel="nofollow"><img src="http://hbb.afl.rakuten.co.jp/hsb/0ea7f9af.0570e4b9.0ea7f99d.1ac92fca/153145/" border="0" style="max-width:100%;height:auto"></a><img border="0" width="1" height="1" src="https://www13.a8.net/0.gif?a8mat=3BSJRH+E691I2+2HOM+6JRNL" alt="">',
   },
 };
 
