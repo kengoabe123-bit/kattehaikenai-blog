@@ -11,9 +11,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
     { url: `${baseUrl}/privacy`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
     { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
-    { url: `${baseUrl}/category/entertainment`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.8 },
     { url: `${baseUrl}/category/lifestyle`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.8 },
-    { url: `${baseUrl}/category/sports`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.8 },
+    { url: `${baseUrl}/category/seasonal`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.8 },
+    { url: `${baseUrl}/category/money`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.8 },
   ];
 
   const articlePages = articles.map((article) => ({

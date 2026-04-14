@@ -96,9 +96,9 @@ export const AFFILIATES: Record<string, A8Affiliate> = {
 
 // ── カテゴリ別の表示ルール ──
 export const CATEGORY_AFFILIATES: Record<string, string[]> = {
-  entertainment: ['u-next', 'dmm-dazn'],
-  lifestyle: ['rakuten', 'rakuten-travel'],
-  sports: ['dmm-dazn', 'rakuten'],
+  lifestyle: ['rakuten', 'u-next'],
+  seasonal: ['rakuten-travel', 'rakuten'],
+  money: ['rakuten', 'u-next'],
 };
 
 /**

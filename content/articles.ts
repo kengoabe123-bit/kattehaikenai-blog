@@ -3,7 +3,7 @@ export interface Article {
   slug: string;
   title: string;
   description: string;
-  category: 'entertainment' | 'lifestyle' | 'sports';
+  category: 'lifestyle' | 'seasonal' | 'money';
   tags: string[];
   publishedAt: string;
   updatedAt: string;
@@ -46,9 +46,9 @@ export interface AffiliateLink {
 }
 
 export const CATEGORIES = {
-  entertainment: { label: 'エンタメ', color: '#e94560' },
   lifestyle: { label: '暮らし', color: '#0f3460' },
-  sports: { label: 'スポーツ', color: '#16a085' },
+  seasonal: { label: '季節・イベント', color: '#e94560' },
+  money: { label: '節約・おトク', color: '#16a085' },
 } as const;
 
 export type CategoryKey = keyof typeof CATEGORIES;
@@ -60,7 +60,7 @@ export const articles: Article[] = [
     slug: 'what-is-trending-2026-spring',
     title: '【2026年春】今話題のトレンドまとめ！知っておきたい最新ニュース',
     description: '2026年春に注目されているトレンドを徹底解説。エンタメ・暮らし・スポーツまで、今知っておくべき話題をまとめました。',
-    category: 'entertainment',
+    category: 'lifestyle',
     tags: ['トレンド', '2026年', '春'],
     publishedAt: '2026-04-13T00:00:00+09:00',
     updatedAt: '2026-04-13T00:00:00+09:00',
@@ -1495,7 +1495,7 @@ export const articles: Article[] = [
     slug: '2026-haru-drama-osusume-ranking',
     title: '【2026年最新】春ドラマおすすめランキング！絶対見たい人気作品を徹底解説',
     description: '2026年春ドラマで何を見るか迷っていませんか？イマドキ！が厳選したおすすめ作品をランキング形式でご紹介。話題のキャストやあらすじ、見どころまで詳しく解説し、あなたの次の「推しドラマ」を見つけるお手伝いをします！',
-    category: 'entertainment',
+    category: 'lifestyle',
     tags: ['2026春ドラマ', 'おすすめドラマ', 'ドラマランキング', '新作ドラマ', '見どころ', 'VOD', 'ミステリー', '恋愛'],
     publishedAt: '2026-04-14T00:00:00+09:00',
     updatedAt: '2026-04-14T00:00:00+09:00',

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { articles, CATEGORIES } from '@/content/articles';
 import type { CategoryKey } from '@/content/articles';
 
-const validCategories: CategoryKey[] = ['entertainment', 'lifestyle', 'sports'];
+const validCategories: CategoryKey[] = ['lifestyle', 'seasonal', 'money'];
 
 export function generateStaticParams() {
   return validCategories.map((name) => ({ name }));
