@@ -324,44 +324,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
 
         {/* サイドバー */}
         <aside className="sidebar">
-          {/* サイドバーバナー1（上部・300×250px固定枠） */}
-          <div className="sidebar-block sidebar-ad">
-            <div className="sidebar-ad-slot sidebar-ad-fixed" id="sidebar-ad-top">
-              {(() => {
-                const affiliates = getAffiliatesForCategory(article.category);
-                const topAff = affiliates[0];
-                if (!topAff) return (
-                  <div className="sidebar-ad-placeholder">
-                    <p>PR</p>
-                  </div>
-                );
-                // bannerHtmlがあればそれを使用（A8.net画像バナー）
-                if (topAff.bannerHtml) {
-                  return (
-                    <div
-                      className="sidebar-banner-html"
-                      dangerouslySetInnerHTML={{ __html: topAff.bannerHtml }}
-                    />
-                  );
-                }
-                // フォールバック：テキストバナー
-                return (
-                  <a
-                    href={topAff.url}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="sidebar-aff-simple"
-                  >
-                    <span className="sidebar-aff-name">{topAff.serviceName}</span>
-                    <span className="sidebar-aff-catch">{topAff.catchcopy}</span>
-                    <span className="sidebar-aff-cta">{topAff.buttonLabel} →</span>
-                    <img src={topAff.trackingPixel} width={1} height={1} alt="" style={{ border: 0, position: 'absolute', opacity: 0 }} />
-                  </a>
-                );
-              })()}
-            </div>
-          </div>
-
+          {/* カテゴリ */}
           <div className="sidebar-block">
             <h3 className="sidebar-title">カテゴリ</h3>
             <ul className="sidebar-categories">
@@ -381,12 +344,44 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             </ul>
           </div>
 
-          {/* サイドバーバナー2（下部・300×250px固定枠） */}
+          {/* サイドバーバナー1（U-NEXT等） */}
+          <div className="sidebar-block sidebar-ad">
+            <div className="sidebar-ad-slot sidebar-ad-fixed" id="sidebar-ad-top">
+              {(() => {
+                const affiliates = getAffiliatesForCategory(article.category);
+                const topAff = affiliates[1];
+                if (!topAff) return null;
+                if (topAff.bannerHtml) {
+                  return (
+                    <div
+                      className="sidebar-banner-html"
+                      dangerouslySetInnerHTML={{ __html: topAff.bannerHtml }}
+                    />
+                  );
+                }
+                return (
+                  <a
+                    href={topAff.url}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="sidebar-aff-simple"
+                  >
+                    <span className="sidebar-aff-name">{topAff.serviceName}</span>
+                    <span className="sidebar-aff-catch">{topAff.catchcopy}</span>
+                    <span className="sidebar-aff-cta">{topAff.buttonLabel} →</span>
+                    <img src={topAff.trackingPixel} width={1} height={1} alt="" style={{ border: 0, position: 'absolute', opacity: 0 }} />
+                  </a>
+                );
+              })()}
+            </div>
+          </div>
+
+          {/* サイドバーバナー2（楽天等） */}
           <div className="sidebar-block sidebar-ad">
             <div className="sidebar-ad-slot sidebar-ad-fixed" id="sidebar-ad-bottom">
               {(() => {
                 const affiliates = getAffiliatesForCategory(article.category);
-                const bottomAff = affiliates[1];
+                const bottomAff = affiliates[0];
                 if (!bottomAff) return null;
                 if (bottomAff.bannerHtml) {
                   return (
