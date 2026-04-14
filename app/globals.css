@@ -573,9 +573,14 @@ ul, ol { list-style: none; }
 }
 
 /* 楽天リンクボタン */
+.ranking-row-ctas {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
 .ranking-row-cta {
   display: inline-block;
-  margin-top: 6px;
   padding: 5px 14px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -588,6 +593,9 @@ ul, ol { list-style: none; }
 .ranking-row-cta:hover {
   filter: brightness(1.2);
   transform: translateY(-1px);
+}
+.ranking-row-cta-amazon {
+  background: linear-gradient(135deg, #FF9900, #e88500);
 }
 
 /* ---------- Table of Contents ---------- */

@@ -26,6 +26,7 @@ export interface RankingItem {
   comment: string;
   imageUrl?: string;      // 楽天APIから自動取得
   affiliateUrl?: string;  // 楽天アフィリエイトリンク
+  amazonUrl?: string;     // Amazonアフィリエイトリンク
   price?: string;         // 価格表示
 }
 

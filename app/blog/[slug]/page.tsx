@@ -164,16 +164,28 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                         <span className="ranking-row-title">{item.name}</span>
                         {item.price && <span className="ranking-row-price">{item.price}</span>}
                         <span className="ranking-row-sub">{item.comment}</span>
-                        {item.affiliateUrl && (
-                          <a
-                            href={item.affiliateUrl}
-                            target="_blank"
-                            rel="noopener noreferrer nofollow"
-                            className="ranking-row-cta"
-                          >
-                            楽天で見る →
-                          </a>
-                        )}
+                        <div className="ranking-row-ctas">
+                          {item.affiliateUrl && (
+                            <a
+                              href={item.affiliateUrl}
+                              target="_blank"
+                              rel="noopener noreferrer nofollow"
+                              className="ranking-row-cta"
+                            >
+                              🛒 楽天で見る →
+                            </a>
+                          )}
+                          {item.amazonUrl && (
+                            <a
+                              href={item.amazonUrl}
+                              target="_blank"
+                              rel="noopener noreferrer nofollow"
+                              className="ranking-row-cta ranking-row-cta-amazon"
+                            >
+                              📦 Amazonで見る →
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   );
