@@ -204,12 +204,12 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           {article.content.sections.map((section, i) => (
             <section key={i} id={`section-${i}`} className="article-section">
               <h2>{section.heading}</h2>
-              <div dangerouslySetInnerHTML={{ __html: section.body }} />
               {section.image && (
                 <figure className="article-figure">
                   <img src={section.image} alt={section.imageAlt || ''} loading="lazy" />
                 </figure>
               )}
+              <div dangerouslySetInnerHTML={{ __html: section.body }} />
             </section>
           ))}
 
