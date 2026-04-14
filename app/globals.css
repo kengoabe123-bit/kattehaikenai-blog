@@ -845,6 +845,49 @@ ul, ol { list-style: none; }
   margin-bottom: 12px;
   text-align: right;
 }
+.aff-banner-grid {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.aff-banner-item {
+  text-align: center;
+}
+.aff-banner-html {
+  display: inline-block;
+}
+.aff-banner-html img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+.aff-card-simple {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: transform var(--transition), box-shadow var(--transition);
+  position: relative;
+}
+.aff-card-simple:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.aff-card-btn-simple {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 50px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
 
 .aff-card {
   display: block;

@@ -225,51 +225,39 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             </section>
           ))}
 
-          {/* アフィリエイトボックス（カテゴリ別自動表示） */}
+          {/* アフィリエイトバナー（カテゴリ別自動表示） */}
           {(() => {
             const affiliates = getAffiliatesForCategory(article.category);
             if (affiliates.length === 0) return null;
             return (
               <div className="aff-section">
                 <p className="aff-section-notice">※ 以下はプロモーションを含みます</p>
-                {affiliates.map((aff) => (
-                  <a
-                    key={aff.id}
-                    href={aff.url}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="aff-card"
-                    style={{ background: aff.brandGradient }}
-                  >
-                    <div className="aff-card-header">
-                      <span className="aff-card-icon">{aff.icon}</span>
-                      <div>
-                        <span className="aff-card-name">{aff.serviceName}</span>
-                        <span className="aff-card-catch">{aff.catchcopy}</span>
-                      </div>
+                <div className="aff-banner-grid">
+                  {affiliates.map((aff) => (
+                    <div key={aff.id} className="aff-banner-item">
+                      {aff.bannerHtml ? (
+                        <div
+                          className="aff-banner-html"
+                          dangerouslySetInnerHTML={{ __html: aff.bannerHtml }}
+                        />
+                      ) : (
+                        <a
+                          href={aff.url}
+                          target="_blank"
+                          rel="noopener noreferrer nofollow"
+                          className="aff-card-simple"
+                        >
+                          <span className="aff-card-icon">{aff.icon}</span>
+                          <span className="aff-card-name">{aff.serviceName}</span>
+                          <span className="aff-card-btn-simple" style={{ background: aff.buttonGradient }}>
+                            {aff.buttonLabel}
+                          </span>
+                          <img src={aff.trackingPixel} width={1} height={1} alt="" style={{ border: 0, position: 'absolute', opacity: 0 }} />
+                        </a>
+                      )}
                     </div>
-                    <p className="aff-card-desc">{aff.description}</p>
-                    <ul className="aff-card-features">
-                      {aff.features.map((f, i) => (
-                        <li key={i}>✓ {f}</li>
-                      ))}
-                    </ul>
-                    <span
-                      className="aff-card-btn"
-                      style={{ background: aff.buttonGradient }}
-                    >
-                      {aff.buttonLabel}
-                    </span>
-                    {/* A8.net トラッキングピクセル */}
-                    <img
-                      src={aff.trackingPixel}
-                      width={1}
-                      height={1}
-                      alt=""
-                      style={{ border: 0, position: 'absolute', opacity: 0 }}
-                    />
-                  </a>
-                ))}
+                  ))}
+                </div>
               </div>
             );
           })()}
