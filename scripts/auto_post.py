@@ -204,8 +204,11 @@ def search_rakuten_product(product_name: str) -> dict | None:
     return None
 
 def enrich_ranking_with_rakuten(ranking_items: list[dict]) -> list[dict]:
-    """ランキングの各商品に楽天APIの情報を付与する"""
+    """ランキングの各商品に楽天APIの情報を付与する（フォールバック付き）"""
     if not RAKUTEN_APP_ID:
+        print("  ⚠️ RAKUTEN_APP_ID not set, using fallback search URLs")
+        for item in ranking_items:
+            _add_fallback_urls(item)
         return ranking_items
 
     print("  🛒 Enriching ranking items with Rakuten product data...")
@@ -215,9 +218,29 @@ def enrich_ranking_with_rakuten(ranking_items: list[dict]) -> list[dict]:
             item["imageUrl"] = product_data["imageUrl"]
             item["affiliateUrl"] = product_data["affiliateUrl"]
             item["price"] = product_data["price"]
-
+        else:
+            # フォールバック: 楽天検索URLとAmazon検索URLを自動生成
+            print(f"    🔄 Fallback URLs for: {item['name']}")
+            _add_fallback_urls(item)
 
     return ranking_items
+
+
+def _add_fallback_urls(item: dict) -> None:
+    """楽天API失敗時のフォールバック: 楽天検索URL + Amazon検索URLを生成"""
+    product_name = clean_product_name(item.get("name", ""))
+    encoded_name = urllib.parse.quote(product_name)
+
+    # 楽天検索URL（アフィリエイトIDがあればリダイレクト経由）
+    if RAKUTEN_AFFILIATE_ID:
+        item["affiliateUrl"] = f"https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_AFFILIATE_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{encoded_name}%2F"
+    else:
+        item["affiliateUrl"] = f"https://search.rakuten.co.jp/search/mall/{encoded_name}/"
+
+    # Amazon検索URL
+    item["amazonUrl"] = f"https://www.amazon.co.jp/s?k={encoded_name}"
+
+    print(f"    ✅ Fallback: 楽天検索 + Amazon検索 URL generated")
 
 
 # ================================================
@@ -538,11 +561,14 @@ def build_trend_article_ts_entry(article: dict, images: list[dict], today: str, 
             r_image = str(r.get("imageUrl", "")).replace("'", "\\'")
             r_aff = str(r.get("affiliateUrl", "")).replace("'", "\\'")
             r_price = str(r.get("price", "")).replace("'", "\\'")
+            r_amazon = str(r.get("amazonUrl", "")).replace("'", "\\'")
             entry = f"      {{ rank: {r_rank}, name: '{r_name}', rating: {r_rating}, comment: '{r_comment}'"
             if r_image:
                 entry += f", imageUrl: '{r_image}'"
             if r_aff:
                 entry += f", affiliateUrl: '{r_aff}'"
+            if r_amazon:
+                entry += f", amazonUrl: '{r_amazon}'"
             if r_price:
                 entry += f", price: '{r_price}'"
             entry += " }"
