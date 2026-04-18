@@ -3,7 +3,7 @@ export interface Article {
   slug: string;
   title: string;
   description: string;
-  category: 'lifestyle' | 'seasonal' | 'money';
+  category: 'lifestyle' | 'seasonal' | 'money' | 'entertainment' | 'sports';
   tags: string[];
   publishedAt: string;
   updatedAt: string;
@@ -49,6 +49,8 @@ export const CATEGORIES = {
   lifestyle: { label: '暮らし', color: '#0f3460' },
   seasonal: { label: '季節・イベント', color: '#e94560' },
   money: { label: '節約・おトク', color: '#16a085' },
+  entertainment: { label: 'エンタメ', color: '#8e44ad' },
+  sports: { label: 'スポーツ', color: '#e67e22' },
 } as const;
 
 export type CategoryKey = keyof typeof CATEGORIES;
