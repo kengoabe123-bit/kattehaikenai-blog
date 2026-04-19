@@ -11,6 +11,8 @@ export function Header() {
           <Link href="/category/lifestyle">暮らし</Link>
           <Link href="/category/seasonal">季節・イベント</Link>
           <Link href="/category/money">節約・おトク</Link>
+          <Link href="/category/entertainment">エンタメ</Link>
+          <Link href="/category/sports">スポーツ</Link>
           <Link href="/about">運営者情報</Link>
         </nav>
       </div>
